@@ -1,0 +1,10 @@
+{
+  "server": {
+    "port": 8888
+  },
+  "db": {
+    "host": "localhost:27017",
+    "db_name": "umsdb",
+    "useObjectId": true
+  }
+}
