@@ -35,6 +35,7 @@ dependencies {
   implementation("io.vertx:vertx-web-api-contract")
   implementation("io.vertx:vertx-config")
   implementation("io.vertx:vertx-codegen")
+  implementation("com.google.inject:guice:7.0.0")
   testImplementation("io.vertx:vertx-junit5")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
 }

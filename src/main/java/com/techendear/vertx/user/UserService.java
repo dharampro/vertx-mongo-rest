@@ -1,20 +1,27 @@
 package com.techendear.vertx.user;
 
-import com.techendear.vertx.user.domain.UserResponse;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+import com.techendear.vertx.user.model.UserRequest;
+import io.vertx.core.Future;
+import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.client.WebClient;
 
 public class UserService {
 
-  public Future<UserResponse> getUser() {
-    UserResponse resp = new UserResponse();
-    resp.setId("1234");
-    resp.setName("Dharmendra Awasthi");
-    resp.setEmail("abc@gmail.com");
-    resp.setPhone("8787654579");
-    resp.setAddress("1/531, sector-h,LKO");
-    resp.setActive(true);
-    return CompletableFuture.completedFuture(new UserResponse());
+  private UserRepository userRepository;
+  public UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  public Future<String> createUser(UserRequest userRequest) {
+    return userRepository.createUser(userRequest);
+  }
+
+  public Future<JsonObject> getUser(String taskId) {
+    return userRepository.getUserByTaskId(taskId);
+  }
+
+  public Future<JsonObject> createExternalUser(UserRequest request) {
+    return null;
   }
 }

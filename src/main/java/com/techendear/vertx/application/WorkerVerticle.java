@@ -1,6 +1,5 @@
 package com.techendear.vertx.application;
 
-import com.google.inject.Inject;
 import com.techendear.vertx.user.UserHandler;
 import com.techendear.vertx.user.UserRepository;
 import com.techendear.vertx.user.UserService;
@@ -13,13 +12,8 @@ import io.vertx.core.Promise;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.web.client.WebClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
-public class MainVertical extends AbstractVerticle {
-
-  private final Logger log = LoggerFactory.getLogger(MainVertical.class);
+public class WorkerVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
@@ -32,9 +26,11 @@ public class MainVertical extends AbstractVerticle {
       vertx.createHttpServer()
         .requestHandler(routers.gerRouter(vertx))
         .listen(jsonConfig.getJsonObject("server").getInteger("port"));
+      vertx.eventBus().consumer("create.user.EXTERNAL", res ->
+        service.createUser(JsonObject.mapFrom(res.body()).mapTo(UserRequest.class))
+      );
     });
   }
-
 
   private ConfigRetriever configuration() {
     ConfigRetrieverOptions options = new ConfigRetrieverOptions()
