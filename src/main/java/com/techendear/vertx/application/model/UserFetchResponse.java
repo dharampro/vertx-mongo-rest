@@ -26,6 +26,7 @@ public class UserFetchResponse {
     this.phone = jsonObject.getString("phone");
     this.email = jsonObject.getString("email");
     this.userName = jsonObject.getString("userName");
+    this.userType = UserType.valueOf(jsonObject.getString("userType"));
   }
 
   public String getTaskId() {

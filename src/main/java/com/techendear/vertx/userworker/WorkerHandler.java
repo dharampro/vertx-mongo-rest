@@ -1,7 +1,6 @@
 package com.techendear.vertx.userworker;
 
 import com.techendear.vertx.application.model.UserCreateResponse;
-import com.techendear.vertx.application.model.UserFetchResponse;
 import com.techendear.vertx.application.model.UserRequest;
 import com.techendear.vertx.application.model.UserType;
 import io.vertx.core.Vertx;
