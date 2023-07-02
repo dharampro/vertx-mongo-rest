@@ -1,4 +1,4 @@
-package com.techendear.vertx.user.model;
+package com.techendear.vertx.application.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,18 +1,13 @@
 package com.techendear.vertx.application;
 
-import com.google.inject.Inject;
 import com.techendear.vertx.user.UserHandler;
-import com.techendear.vertx.user.UserRepository;
 import com.techendear.vertx.user.UserService;
-import com.techendear.vertx.user.model.UserRequest;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.MongoClient;
-import io.vertx.ext.web.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +20,8 @@ public class MainVertical extends AbstractVerticle {
   public void start(Promise<Void> startPromise) throws Exception {
     configuration().getConfig().onComplete(config -> {
       JsonObject jsonConfig = config.result();
-      UserRepository repository = new UserRepository(MongoClient.createShared(vertx, jsonConfig.getJsonObject("db")));
-      UserService service = new UserService(repository);
-      UserHandler handler = new UserHandler(service, WebClient.create(vertx));
+      UserService service = new UserService(vertx);
+      UserHandler handler = new UserHandler(service);
       Routers routers = new Routers(handler);
       vertx.createHttpServer()
         .requestHandler(routers.gerRouter(vertx))

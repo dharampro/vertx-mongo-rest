@@ -1,5 +1,6 @@
-package com.techendear.vertx.user.model;
+package com.techendear.vertx.application.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.codegen.annotations.DataObject;
@@ -12,6 +13,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserRequest implements Serializable {
 
+  @JsonIgnore
   @JsonProperty("_id")
   private String taskId;
   private String name;
