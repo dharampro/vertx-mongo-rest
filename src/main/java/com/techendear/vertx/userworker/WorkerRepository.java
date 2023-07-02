@@ -1,17 +1,17 @@
-package com.techendear.vertx.user;
+package com.techendear.vertx.userworker;
 
-import com.techendear.vertx.user.model.UserFetchResponse;
-import com.techendear.vertx.user.model.UserRequest;
+import com.techendear.vertx.application.model.UserRequest;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
 
-public class UserRepository {
+public class WorkerRepository {
+
 
   private static final String USER_COLLECTION = "userCollection";
   private MongoClient mongoClient;
 
-  public UserRepository(MongoClient mongoClient) {
+  public WorkerRepository(MongoClient mongoClient) {
     this.mongoClient = mongoClient;
   }
 
@@ -23,5 +23,4 @@ public class UserRepository {
     JsonObject query = new JsonObject().put("_id", taskId);
     return mongoClient.findOne(USER_COLLECTION, query, null);
   }
-
 }

@@ -1,9 +1,8 @@
 package com.techendear.vertx.application;
 
-import com.techendear.vertx.user.UserHandler;
-import com.techendear.vertx.user.UserRepository;
-import com.techendear.vertx.user.UserService;
-import com.techendear.vertx.user.model.UserRequest;
+import com.techendear.vertx.userworker.WorkerHandler;
+import com.techendear.vertx.userworker.WorkerRepository;
+import com.techendear.vertx.userworker.WorkerService;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
@@ -19,16 +18,11 @@ public class WorkerVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) throws Exception {
     configuration().getConfig().onComplete(config -> {
       JsonObject jsonConfig = config.result();
-      UserRepository repository = new UserRepository(MongoClient.createShared(vertx, jsonConfig.getJsonObject("db")));
-      UserService service = new UserService(repository);
-      UserHandler handler = new UserHandler(service, WebClient.create(vertx));
-      Routers routers = new Routers(handler);
-      vertx.createHttpServer()
-        .requestHandler(routers.gerRouter(vertx))
-        .listen(jsonConfig.getJsonObject("server").getInteger("port"));
-      vertx.eventBus().consumer("create.user.EXTERNAL", res ->
-        service.createUser(JsonObject.mapFrom(res.body()).mapTo(UserRequest.class))
-      );
+      WorkerRepository repository = new WorkerRepository(MongoClient.createShared(vertx, jsonConfig.getJsonObject("db")));
+      WorkerService service = new WorkerService(repository);
+      WorkerHandler handler = new WorkerHandler(service, WebClient.create(vertx));
+      vertx.eventBus().consumer("user.create.ops.bus").handler(handler::createUser);
+      vertx.eventBus().consumer("user.fetch.ops.bus").handler(handler::getUser);
     });
   }
 

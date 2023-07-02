@@ -22,7 +22,7 @@ public class Routers {
     Router router = Router.router(vertx);
 //    router.route(USER_URL + "/*").handler(BodyHandler.create());
     router.post(USER_URL).handler(userHandler::createUser);
-    router.get(USER_URL_GET).handler(userHandler::getUser);
+    router.get(USER_URL_GET).handler(userHandler::fetchUser);
     return router;
   }
 }

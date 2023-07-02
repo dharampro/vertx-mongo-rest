@@ -1,27 +1,38 @@
-package com.techendear.vertx.user.model;
+package com.techendear.vertx.application.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @DataObject
-public class UserFetchResponse {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserRequest implements Serializable {
+
+  @JsonIgnore
+  @JsonProperty("_id")
   private String taskId;
   private String name;
   private String email;
   private String phone;
   private Boolean active;
+  private String userName;
   private UserType userType;
-  public UserFetchResponse() {
+
+  public UserRequest() {
   }
-  public UserFetchResponse(JsonObject jsonObject) {
+
+  public UserRequest(JsonObject jsonObject) {
     this.taskId = jsonObject.getString("_id");
     this.name = jsonObject.getString("name");
     this.active = jsonObject.getBoolean("active");
     this.phone = jsonObject.getString("phone");
     this.email = jsonObject.getString("email");
+    this.userName = jsonObject.getString("userName");
   }
 
   public String getTaskId() {
@@ -72,27 +83,36 @@ public class UserFetchResponse {
     this.userType = userType;
   }
 
+  public String getUserName() {
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    UserFetchResponse that = (UserFetchResponse) o;
-    return Objects.equals(taskId, that.taskId) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(phone, that.phone) && Objects.equals(active, that.active) && userType == that.userType;
+    UserRequest that = (UserRequest) o;
+    return Objects.equals(taskId, that.taskId) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(phone, that.phone) && Objects.equals(active, that.active) && Objects.equals(userName, that.userName) && userType == that.userType;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(taskId, name, email, phone, active, userType);
+    return Objects.hash(taskId, name, email, phone, active, userName, userType);
   }
 
   @Override
   public String toString() {
-    return "UserFetchResponse{" +
-      "id='" + taskId + '\'' +
+    return "UserRequest{" +
+      "taskId='" + taskId + '\'' +
       ", name='" + name + '\'' +
       ", email='" + email + '\'' +
       ", phone='" + phone + '\'' +
       ", active=" + active +
+      ", userName='" + userName + '\'' +
       ", userType=" + userType +
       '}';
   }

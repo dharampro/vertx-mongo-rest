@@ -1,27 +1,23 @@
 package com.techendear.vertx.user;
 
-import com.techendear.vertx.user.model.UserRequest;
-import io.vertx.core.Future;
+import com.techendear.vertx.application.model.UserRequest;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.client.WebClient;
+import org.bson.json.JsonObject;
+
+import java.util.concurrent.Future;
 
 public class UserService {
+  private Vertx vertx;
 
-  private UserRepository userRepository;
-  public UserService(UserRepository userRepository) {
-    this.userRepository = userRepository;
+  public UserService(Vertx vertx) {
+    this.vertx = vertx;
   }
 
-  public Future<String> createUser(UserRequest userRequest) {
-    return userRepository.createUser(userRequest);
+  public Future<JsonObject> createUser(UserRequest userRequest) {
+    return null;
   }
 
-  public Future<JsonObject> getUser(String taskId) {
-    return userRepository.getUserByTaskId(taskId);
-  }
-
-  public Future<JsonObject> createExternalUser(UserRequest request) {
+  public Future<JsonObject> fetchUserByTaskId(String taskId) {
     return null;
   }
 }
