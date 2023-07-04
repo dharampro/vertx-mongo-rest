@@ -1,12 +1,15 @@
 package com.techendear.vertx.application.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
 
+import java.util.List;
 import java.util.Objects;
 
 @DataObject
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserFetchResponse {
   private String taskId;
   private String name;
@@ -15,6 +18,7 @@ public class UserFetchResponse {
   private Boolean active;
   private UserType userType;
   private String userName;
+  private List<ProductResponse> products;
 
   public UserFetchResponse() {
   }
@@ -27,6 +31,7 @@ public class UserFetchResponse {
     this.email = jsonObject.getString("email");
     this.userName = jsonObject.getString("userName");
     this.userType = UserType.valueOf(jsonObject.getString("userType"));
+    this.products = jsonObject.getJsonArray("products").getList();
   }
 
   public String getTaskId() {
@@ -85,17 +90,25 @@ public class UserFetchResponse {
     this.userName = userName;
   }
 
+  public List<ProductResponse> getProducts() {
+    return products;
+  }
+
+  public void setProducts(List<ProductResponse> products) {
+    this.products = products;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     UserFetchResponse that = (UserFetchResponse) o;
-    return Objects.equals(taskId, that.taskId) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(phone, that.phone) && Objects.equals(active, that.active) && userType == that.userType && Objects.equals(userName, that.userName);
+    return Objects.equals(taskId, that.taskId) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(phone, that.phone) && Objects.equals(active, that.active) && userType == that.userType && Objects.equals(userName, that.userName) && Objects.equals(products, that.products);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(taskId, name, email, phone, active, userType, userName);
+    return Objects.hash(taskId, name, email, phone, active, userType, userName, products);
   }
 
   @Override
@@ -108,6 +121,7 @@ public class UserFetchResponse {
       ", active=" + active +
       ", userType=" + userType +
       ", userName='" + userName + '\'' +
+      ", products=" + products +
       '}';
   }
 }

@@ -1,8 +1,8 @@
 package com.techendear.vertx.application;
 
-import com.techendear.vertx.userworker.WorkerHandler;
-import com.techendear.vertx.userworker.WorkerRepository;
-import com.techendear.vertx.userworker.WorkerService;
+import com.techendear.vertx.worker.WorkerHandler;
+import com.techendear.vertx.worker.WorkerRepository;
+import com.techendear.vertx.worker.WorkerService;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
@@ -23,6 +23,10 @@ public class WorkerVerticle extends AbstractVerticle {
       WorkerHandler handler = new WorkerHandler(service, WebClient.create(vertx));
       vertx.eventBus().consumer("user.create.ops.bus").handler(handler::createUser);
       vertx.eventBus().consumer("user.fetch.ops.bus").handler(handler::getUser);
+      vertx.eventBus().consumer("product.create.ops.bus").handler(handler::createProduct);
+      vertx.eventBus().consumer("product.fetch.ops.bus").handler(handler::getProduct);
+      vertx.eventBus().consumer("user.product.fetch.ops.bus").handler(handler::getProduct);
+      vertx.eventBus().consumer("user.product.subscribe.ops.bus").handler(handler::getProduct);
     });
   }
 

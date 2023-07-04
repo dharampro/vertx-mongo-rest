@@ -7,11 +7,12 @@ import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @DataObject
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserRequest implements Serializable {
+public class User implements Serializable {
 
   @JsonIgnore
   @JsonProperty("_id")
@@ -22,17 +23,19 @@ public class UserRequest implements Serializable {
   private Boolean active;
   private String userName;
   private UserType userType;
+  private List<String> productIds;
 
-  public UserRequest() {
+  public User() {
   }
 
-  public UserRequest(JsonObject jsonObject) {
+  public User(JsonObject jsonObject) {
     this.taskId = jsonObject.getString("_id");
     this.name = jsonObject.getString("name");
     this.active = jsonObject.getBoolean("active");
     this.phone = jsonObject.getString("phone");
     this.email = jsonObject.getString("email");
     this.userName = jsonObject.getString("userName");
+    this.productIds = jsonObject.getJsonArray("productIds").getList();
   }
 
   public String getTaskId() {
@@ -75,14 +78,6 @@ public class UserRequest implements Serializable {
     this.active = active;
   }
 
-  public UserType getUserType() {
-    return userType;
-  }
-
-  public void setUserType(UserType userType) {
-    this.userType = userType;
-  }
-
   public String getUserName() {
     return userName;
   }
@@ -91,22 +86,38 @@ public class UserRequest implements Serializable {
     this.userName = userName;
   }
 
+  public UserType getUserType() {
+    return userType;
+  }
+
+  public void setUserType(UserType userType) {
+    this.userType = userType;
+  }
+
+  public List<String> getProductIds() {
+    return productIds;
+  }
+
+  public void setProductIds(List<String> productIds) {
+    this.productIds = productIds;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    UserRequest that = (UserRequest) o;
-    return Objects.equals(taskId, that.taskId) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(phone, that.phone) && Objects.equals(active, that.active) && Objects.equals(userName, that.userName) && userType == that.userType;
+    User user = (User) o;
+    return Objects.equals(taskId, user.taskId) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(phone, user.phone) && Objects.equals(active, user.active) && Objects.equals(userName, user.userName) && userType == user.userType && Objects.equals(productIds, user.productIds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(taskId, name, email, phone, active, userName, userType);
+    return Objects.hash(taskId, name, email, phone, active, userName, userType, productIds);
   }
 
   @Override
   public String toString() {
-    return "UserRequest{" +
+    return "User{" +
       "taskId='" + taskId + '\'' +
       ", name='" + name + '\'' +
       ", email='" + email + '\'' +
@@ -114,6 +125,7 @@ public class UserRequest implements Serializable {
       ", active=" + active +
       ", userName='" + userName + '\'' +
       ", userType=" + userType +
+      ", productIds=" + productIds +
       '}';
   }
 }

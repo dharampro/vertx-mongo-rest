@@ -1,7 +1,7 @@
 package com.techendear.vertx.application;
 
+import com.techendear.vertx.user.ProductHandler;
 import com.techendear.vertx.user.UserHandler;
-import com.techendear.vertx.user.UserService;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
@@ -20,9 +20,7 @@ public class MainVertical extends AbstractVerticle {
   public void start(Promise<Void> startPromise) throws Exception {
     configuration().getConfig().onComplete(config -> {
       JsonObject jsonConfig = config.result();
-      UserService service = new UserService(vertx);
-      UserHandler handler = new UserHandler(service);
-      Routers routers = new Routers(handler);
+      Routers routers = new Routers(new UserHandler(), new ProductHandler());
       vertx.createHttpServer()
         .requestHandler(routers.gerRouter(vertx))
         .listen(jsonConfig.getJsonObject("server").getInteger("port"));

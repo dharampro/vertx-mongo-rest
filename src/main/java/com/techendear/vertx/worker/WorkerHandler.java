@@ -1,12 +1,13 @@
-package com.techendear.vertx.userworker;
+package com.techendear.vertx.worker;
 
-import com.techendear.vertx.application.model.UserCreateResponse;
-import com.techendear.vertx.application.model.UserRequest;
-import com.techendear.vertx.application.model.UserType;
+import com.techendear.vertx.application.model.*;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
+
+import java.util.List;
 
 public class WorkerHandler {
   private WorkerService workerService;
@@ -18,7 +19,7 @@ public class WorkerHandler {
   }
 
   private UserCreateResponse createResponse(JsonObject jsonObject) {
-    UserRequest resp = jsonObject.mapTo(UserRequest.class);
+    User resp = jsonObject.mapTo(User.class);
     UserCreateResponse response = new UserCreateResponse();
     response.setTaskId(resp.getTaskId());
     response.setUserType(resp.getUserType());
@@ -27,7 +28,7 @@ public class WorkerHandler {
 
   public void createUser(Message<Object> userRequestMessage) {
 
-    UserRequest request = JsonObject.mapFrom(userRequestMessage.body()).mapTo(UserRequest.class);
+    User request = JsonObject.mapFrom(userRequestMessage.body()).mapTo(User.class);
     if (request.getUserType().equals(UserType.INTERNAL)) {
       workerService.createUser(request).onComplete(response -> {
         if (response.succeeded()) {
@@ -64,6 +65,9 @@ public class WorkerHandler {
     String taskId = objectMessage.body().toString();
     workerService.getUser(taskId).onComplete(result -> {
       if (result.succeeded()) {
+        User user = result.result().mapTo(User.class);
+        List<String> productIds = user.getProductIds();
+
         objectMessage.reply(result.result());
       } else {
         result.cause();
@@ -71,8 +75,33 @@ public class WorkerHandler {
     });
   }
 
-  private void createResponse(Vertx vertx) {
+  public void createProduct(Message<Object> productRequestMessage) {
+    Product request = new Product(JsonObject.mapFrom(productRequestMessage.body()));
+    workerService.createProduct(request).onComplete(result -> {
+      if (result.succeeded()) {
+        productRequestMessage.reply(result.result().toString());
+      } else {
+        result.cause();
+      }
+    });
+  }
 
+  public void getProduct(Message<Object> objectMessage) {
+    String taskId = objectMessage.body().toString();
+    workerService.getProduct(taskId).onComplete(result -> {
+      if (result.succeeded()) {
+        objectMessage.reply(result.result());
+      } else {
+        result.cause();
+      }
+    });
+  }
 
+  public Future<JsonObject> userCourse(String taskId) {
+    return null;
+  }
+
+  public Future<JsonObject> userProductSubscribe(UserProduct userProduct) {
+    return null;
   }
 }
